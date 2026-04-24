@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -681,7 +681,7 @@
         // DOM Elements
         const audio = document.getElementById('audio-player');
         const playBtn = document.getElementById('play-btn');
-        const iconPlay = document.getElementById('iconPlay');
+        const iconPlay = document.getElementById('icon-play');
         const iconPause = document.getElementById('icon-pause');
         const coverArt = document.getElementById('cover-art');
         const trackTitle = document.getElementById('track-title');
@@ -911,36 +911,34 @@
         });
 
         audio.addEventListener('ended', () => {
+
             if (repeatMode === 2) {
-                // repeat ONE
+                // 🔁 Repeat ONE
                 audio.currentTime = 0;
                 audio.play();
-            } else if (repeatMode === 1) {
-                // repeat ALL
-                nextTrack();
-            } else {
-                // 🔥 Repeat OFF → same song reset + pause
-
-                isPlaying = false;
-
-                // reset song
-                audio.currentTime = 0;
-
-                // UI update
-                document.getElementById('icon-play').classList.remove('hidden');
-                document.getElementById('icon-pause').classList.add('hidden');
-
-                // disc stop (but DON'T reset rotation)
-                coverArt.classList.add('paused');
-
-                // progress bar reset
-                progressBar.value = 0;
-                seekFill.style.width = "0%";
-
-                timeCurrent.textContent = "0:00";
+                return;
             }
 
-            audio.pause();
+            if (repeatMode === 1) {
+                // 🔁 Repeat ALL
+                nextTrack();
+                return;
+            }
+
+            // ❌ Repeat OFF
+            isPlaying = false;
+            audio.currentTime = 0;
+
+            document.getElementById('icon-play').classList.remove('hidden');
+            document.getElementById('icon-pause').classList.add('hidden');
+
+            coverArt.classList.add('paused');
+
+            progressBar.value = 0;
+            seekFill.style.width = "0%";
+            timeCurrent.textContent = "0:00";
+
+            audio.pause(); // ✅ only here
         });
 
         repeatBtn.addEventListener("click", () => {
